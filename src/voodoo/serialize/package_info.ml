@@ -7,7 +7,8 @@ module Kind = struct
     | `Parameter of int
     | `Class
     | `ClassType
-    | `File ]
+    | `File
+    | `SourcePage ]
 
   let to_string = function
     | `Page -> "page"
@@ -18,6 +19,7 @@ module Kind = struct
     | `Class -> "class"
     | `ClassType -> "class-type"
     | `File -> "file"
+    | `SourcePage -> "source-page"
 
   let of_string = function
     | "page" -> `Page
@@ -27,6 +29,7 @@ module Kind = struct
     | "class" -> `Class
     | "class-type" -> `ClassType
     | "file" -> `File
+    | "source-page" -> `SourcePage
     | s when String.length s > 9 && String.sub s 0 9 = "argument-" ->
         let i = String.sub s 9 (String.length s - 9) in
         `Parameter (int_of_string i)

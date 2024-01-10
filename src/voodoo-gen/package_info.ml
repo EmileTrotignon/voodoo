@@ -2,7 +2,7 @@ module Result = Bos_setup.R
 open Result.Infix
 module StringMap = Map.Make (String)
 
-let info_of_paths ~(info : string Voodoo_serialize.Package_info.t) paths =
+let info_of_paths ~(info : string Voodoo_serialize.Package_info.t) (paths: Odoc_document.Types.Document.t list) =
   let children = ref StringMap.empty in
   let kind = ref StringMap.empty in
   let path_to_string v =
@@ -15,8 +15,13 @@ let info_of_paths ~(info : string Voodoo_serialize.Package_info.t) paths =
     |> String.concat "."
   in
   List.iter
-    (fun (page : Odoc_document.Types.Page.t) ->
-      let path = page.url in
+    (fun (page : Odoc_document.Types.Document.t) ->
+      let path =
+        match page with
+        | Page page -> page.url
+        | Source_page page -> page.url
+        | Asset page -> page.url
+      in
       kind := StringMap.add (path_to_string path) path.kind !kind;
       Option.iter
         (fun (parent : Odoc_document.Url.Path.t) ->

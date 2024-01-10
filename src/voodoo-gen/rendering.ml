@@ -10,6 +10,8 @@ let document_of_odocl ~syntax input =
       Ok (Renderer.document_of_page ~syntax odoctree)
   | Unit_content odoctree ->
       Ok (Renderer.document_of_compilation_unit ~syntax odoctree)
+  | Source_tree_content _odoctree ->
+      failwith "todo" (* should not happen, todo check *)
 
 let render_document ~output odoctree =
   let aux pages =
@@ -62,12 +64,15 @@ let render ~output file =
   document_of_odocl ~syntax:Renderer.OCaml f >>= fun document ->
   render_document ~output document >>= fun () ->
   let urls =
-    let rec get_subpages document =
+    let rec get_subpages (document: Types.Document.t) =
       document
-      :: (Doctree.Subpages.compute document
-         |> List.map (fun (subpage : Types.Subpage.t) ->
-                get_subpages subpage.content)
-         |> List.flatten)
+      :: match document with
+      | Page document ->
+          (Doctree.Subpages.compute document
+          |> List.map (fun (subpage : Types.Subpage.t) ->
+                          get_subpages (Page subpage.content))
+          |> List.flatten)
+      | _ -> []
     in
     get_subpages document
   in
@@ -75,18 +80,18 @@ let render ~output file =
 
 let render_text ~id ~output doc =
   let url = Odoc_document.Url.Path.from_identifier id in
-  Markdown.read_plain doc url >>= render_document ~output
+  Markdown.read_plain doc url >>| (fun p -> Odoc_document.Types.Document.Page p ) >>= render_document ~output
 
 let render_markdown ~id ~output doc =
   let url = Odoc_document.Url.Path.from_identifier id in
   match Markdown.read_md doc url with
-  | Ok page -> render_document ~output page
+  | Ok page -> render_document ~output (Odoc_document.Types.Document.Page page)
   | Error _ -> render_text ~id ~output doc
 
 let render_org ~id ~output doc =
   let url = Odoc_document.Url.Path.from_identifier id in
   match Markdown.read_org doc url with
-  | Ok page -> render_document ~output page
+  | Ok page -> render_document ~output (Odoc_document.Types.Document.Page page)
   | Error _ -> render_text ~id ~output doc
 
 let render_other ~output ~parent ~otherdocs =

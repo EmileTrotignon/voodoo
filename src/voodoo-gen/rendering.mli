@@ -1,7 +1,7 @@
 val render :
   output:(Fpath.t -> Odoc_odoc.Fs.File.t) ->
   Fpath.t ->
-  (Odoc_document.Types.Page.t list, [ `Msg of string ]) result
+  (Odoc_document.Types.Document.t list, [ `Msg of string ]) result
 (** [render ~output f] renders the [.odocl] file [f] as html by running
     [odoc html-generate]. [output] determines the output path from the input
     path. *)

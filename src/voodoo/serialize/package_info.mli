@@ -7,7 +7,8 @@ module Kind : sig
     | `Parameter of int
     | `Class
     | `ClassType
-    | `File ]
+    | `File
+    | `SourcePage ]
 
   val equal : t -> t -> bool
   val pp : Format.formatter -> t -> unit

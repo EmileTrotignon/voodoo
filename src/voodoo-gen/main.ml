@@ -114,7 +114,6 @@ let generate_pkgver output_dir name_filter version_filter =
               | Some universe ->
                   Fpath.(foutput / "u" / universe / pkg_name / ver)
             in
-
             Package_info.gen ~input:parent ~output:output_prefix paths;
             Rendering.render_other ~parent ~otherdocs ~output |> Result.get_ok;
 
