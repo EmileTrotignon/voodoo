@@ -72,7 +72,7 @@ let render ~output file =
           |> List.map (fun (subpage : Types.Subpage.t) ->
                           get_subpages (Page subpage.content))
           |> List.flatten)
-      | _ -> []
+      | _ -> failwith "not a page"
     in
     get_subpages document
   in
@@ -99,6 +99,7 @@ let render_other ~output ~parent ~otherdocs =
   let errors =
     List.fold_left
       (fun acc (id, doc) ->
+        Format.eprintf "render_other: %a\n%!" Fpath.pp doc;
         let result =
           match Fpath.get_ext doc with
           | ".md" -> render_markdown ~output ~id doc

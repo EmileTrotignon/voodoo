@@ -19,8 +19,8 @@ let info_of_paths ~(info : string Voodoo_serialize.Package_info.t) (paths: Odoc_
       let path =
         match page with
         | Page page -> page.url
-        | Source_page page -> page.url
-        | Asset page -> page.url
+        | Source_page spage -> spage.url
+        | Asset asset -> asset.url
       in
       kind := StringMap.add (path_to_string path) path.kind !kind;
       Option.iter

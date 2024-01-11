@@ -61,7 +61,7 @@ let compile ?parent ?output path ~includes ~children =
   in
   let cmd =
     match parent with
-    | Some str -> Bos.Cmd.(cmd % "--parent" % Printf.sprintf "\"%s\"" str)
+    | Some str -> Bos.Cmd.(cmd % "--package" % Printf.sprintf "\"%s\"" str)
     | None -> cmd
   in
   let cmd =
@@ -101,4 +101,5 @@ let html path ~output =
       v "odoc" % "html-generate" % "--indent" % Fpath.to_string path % "-o"
       % Fpath.to_string output)
   in
-  Util.run_silent cmd
+  Format.printf "odoc html-generate --indent %a -o %a\n%!" Fpath.pp path Fpath.pp output;
+  List.iter (fun line -> print_endline line) (Util.lines_of_process cmd)

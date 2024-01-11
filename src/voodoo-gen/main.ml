@@ -90,6 +90,7 @@ let generate_pkgver output_dir name_filter version_filter =
             let otherdocs = List.sort Fpath.compare files.otherdocs in
             let files = files.odocls in
             Format.eprintf "Found %d files\n%!" (List.length files);
+            List.iter (fun file -> Format.eprintf "File : %a\n%!" Fpath.pp file) files;
             let output file_path =
               let p, ext = Fpath.split_ext ~multi:true file_path in
               let extensions = String.split_on_char '.' ext |> List.rev in
