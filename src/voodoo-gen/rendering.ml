@@ -22,6 +22,7 @@ let render_document ~output odoctree =
         let oc = open_out (Fs.File.to_string output_path) in
         let fmt = Format.formatter_of_out_channel oc in
         Format.fprintf fmt "%t@?" content;
+        Format.printf "File : %s\nContent: %t\n%!" (Fs.File.to_string output_path) content ;
         close_out oc)
   in
   aux
@@ -91,8 +92,12 @@ let render_markdown ~id ~output doc =
 let render_org ~id ~output doc =
   let url = Odoc_document.Url.Path.from_identifier id in
   match Markdown.read_org doc url with
-  | Ok page -> render_document ~output (Odoc_document.Types.Document.Page page)
-  | Error _ -> render_text ~id ~output doc
+  | Ok page ->
+    print_endline "render_org Ok" ;
+    render_document ~output (Odoc_document.Types.Document.Page page)
+  | Error _ ->
+    print_endline "render_org Error" ;
+    render_text ~id ~output doc
 
 let render_other ~output ~parent ~otherdocs =
   docs_ids parent otherdocs >>= fun docs ->

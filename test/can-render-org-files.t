@@ -2,7 +2,7 @@ Install the package
 
   $ PKG=can-render-org-files
   $ opam install packages/$PKG --yes > /dev/null
-  [NOTE] Package can-render-org-files is currently pinned to file:///home/emile/Projects/ocaml/voodoo/_build/.sandbox/9202f8ea1d509b6b907296d3bfc4e431/default/test/packages/can-render-org-files (version 1.0).
+  [NOTE] Package can-render-org-files is currently pinned to file:///home/emile/Projects/ocaml/voodoo/_build/.sandbox/335d37239ee7e474e575aabfaac3e457/default/test/packages/can-render-org-files (version 1.0).
 
 Generate the can-render-org-files documentation
 
@@ -39,12 +39,32 @@ Generate the can-render-org-files documentation
   dest: linked/p/can-render-org-files/1.0/doc/README.org
   odoc html-generate --indent linked/p/can-render-org-files/1.0/page-doc.odocl -o html
 
+  $ tree linked
+  linked
+  `-- p
+      `-- can-render-org-files
+          `-- 1.0
+              |-- doc
+              |   |-- README.org
+              |   `-- opam
+              |-- package.json
+              `-- page-doc.odocl
+  
+  5 directories, 4 files
+
   $ voodoo-gen -n $PKG -o output
   0 other versions, 1 packages
   Found 1 files
   File : linked/p/can-render-org-files/1.0/page-doc.odocl
+  File : output/"1.0"/doc/index.html.json
+  Content: {"type":"documentation","uses_katex":false,"breadcrumbs":[{"name":"\"1.0\"","href":"../index.html","kind":"page"},{"name":"doc","href":"#","kind":"page"}],"toc":[],"source_anchor":null,"preamble":"<h1 id=\"can-render-org-files-1.0\"><a href=\"#can-render-org-files-1.0\" class=\"anchor\"></a>can-render-org-files 1.0</h1>","content":""}
   render_other: linked/p/can-render-org-files/1.0/doc/README.org
+  render_org Ok
+  File : output/"1.0"/README.org.html.json
+  Content: {"type":"documentation","uses_katex":false,"breadcrumbs":[{"name":"\"1.0\"","href":"index.html","kind":"page"},{"name":"README.org","href":"#","kind":"leaf-page"}],"toc":[],"source_anchor":null,"preamble":"<h2>Title 1</h2>","content":"<h3>Title 2</h3>"}
   render_other: linked/p/can-render-org-files/1.0/package.json
+  File : output/"1.0"/package.json.html.json
+  Content: {"type":"documentation","uses_katex":false,"breadcrumbs":[{"name":"\"1.0\"","href":"index.html","kind":"page"},{"name":"package.json","href":"#","kind":"leaf-page"}],"toc":[],"source_anchor":null,"preamble":"<h2>package.json</h2>","content":"<pre>{&quot;libraries&quot;:[]}\u000A</pre>"}
 
 Generates a status.json file
   $ cat output/p/$PKG/1.0/status.json | jq .
@@ -98,6 +118,21 @@ Converted the README.org file in HTML
   5 directories, 4 files
   $ ls output/p/$PKG
   1.0
+  $ tree output
+  output
+  |-- "1.0"
+  |   |-- README.org.html.json
+  |   |-- doc
+  |   |   `-- index.html.json
+  |   `-- package.json.html.json
+  `-- p
+      `-- can-render-org-files
+          `-- 1.0
+              |-- index.js
+              |-- package.json
+              `-- status.json
+  
+  6 directories, 6 files
   $ tree output/p/$PKG
   output/p/can-render-org-files
   `-- 1.0
